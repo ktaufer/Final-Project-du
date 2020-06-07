@@ -1,28 +1,26 @@
 # dependencies
-from flask import Flask, render_template, redirect
-from flask_pymongo import PyMongo
-import scrape_mars
+from flask import Flask, render_template, request, redirect
+import numpy as np
+import keras.models
+import os
+
+# declaring constants
+UPLOAD_FOLDER = '/uploads'
+ALLOWED_EXTENSIONS = {'wav', 'mp3', 'ogg', 'flv', 'mp4', 'wma'}
 
 # create the flask app
-app = Flask(__name__, template_folder='templates')
-
-# declare the database
-app.config["MONGO_URI"] = "mongodb://localhost:27017/mars_db"
-mongo = PyMongo(app)
+app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 # the base route
 @app.route('/')
 def home():
-    mars = mongo.db.mars_facts.find_one()
-    return render_template('index.html', mars=mars)
+    return render_template('index.html')
 
-# the scraping route, which redirects to the base route
-@app.route('/scrape')
-def scraper():
-    mars_facts = mongo.db.mars_facts
-    mars_scrape = scrape_mars.scrape()
-    mars_facts.update({}, mars_scrape, upsert=True)
-    return redirect("/")
+@app.route('/predict', methods = ['GET', 'POST'])
+def predict():
+    
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)
