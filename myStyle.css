@@ -45,6 +45,7 @@ h3{
     border-color: burlywood;
     border-width: medium;
     background-color: darkolivegreen;
+    align-content: center;
 }
 
 #audio{
@@ -66,11 +67,13 @@ div{
 }
 
 #plot{
-    height: 800px;
-    position: relative;
+    height: 100%;
     width: 100%;
-    padding: 2%;
-    justify-content: center;
+    color: burlywood;
+    border-style: solid;
+    border-width: medium;
+    border-color: burlywood;
+    background-color: darkolivegreen;
 }
 
 #menu{
@@ -80,4 +83,22 @@ div{
     border-color: burlywood;
     border-width: medium;
     background-color: darkolivegreen;
+}
+
+#model{
+    color: burlywood;
+    border-color: burlywood;
+    border-style: solid;
+    border-width: medium;
+    background-color: darkolivegreen;
+    display: grid;    
+}
+#table{
+    color: burlywood;
+    border-color: burlywood;
+    border-style: solid;
+    border-width: medium;
+    background-color: darkolivegreen;
+    display: grid; 
+    margin-top: 20px;   
 }

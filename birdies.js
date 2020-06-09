@@ -41,14 +41,23 @@ function init() {
         var keys = Object.keys(countriesCount);
         var values = Object.values(countriesCount);
         var data = [{
-            x: keys,
-            y: values,
-            type: 'bar'
+            x: values,
+            y: keys,
+            type: 'bar',
+            orientation: 'h'
         }];
         var layout = {
             title: 'Bird Sightings per Country',
-            xaxis: {title: 'Country'},
-            yaxis: {title: 'Number of Sightings/Recordings'}
+            xaxis: {title: 'Number of Sightings/Recordings'},
+            yaxis: {title: 'Country'},
+            width: 575,
+            height: 600,
+            margin: {
+                l: 130,
+                r: 0,
+                b: 70,
+                t: 70,
+                pad: 10}
         };
         Plotly.newPlot('plot', data, layout);
 
@@ -73,9 +82,9 @@ function init() {
             accessToken: API_KEY
         });
         var baseMaps = {
+            'Dark': darkmap,
             'Light': lightmap,
-            'Satellite': satellitemap,
-            'Dark': darkmap
+            'Satellite': satellitemap            
         };
         var overlayMaps = {
             'Bird Sightings': markerLayer
@@ -83,7 +92,7 @@ function init() {
         var myMap = L.map('map', {
             center:  [54.5260, 15.2551],
             zoom: 3,
-            layers: [lightmap, markerLayer]
+            layers: [darkmap, markerLayer]
         });
         L.control.layers(baseMaps, overlayMaps, {collapsed: false}).addTo(myMap);
     
@@ -206,12 +215,21 @@ function changePlot(country) {
             type: 'pie'
         }];
         var layout = {
-            title: `${country} Sightings per Species`
+            title: `${country} Sightings per Species`,
+            width: 575,
+            height: 600,
+            margin: {
+                l: 20,
+                r: 20,
+                b: 125,
+                t: 70,
+                pad: 10}
         }
         Plotly.newPlot('plot', data, layout);
     });
 };
 
+// event listener for menu change
 function optionChanged(country) {
     d3.event.preventDefault();
     var country = d3.select("#countries").node().value;
