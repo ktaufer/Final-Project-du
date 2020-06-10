@@ -102,3 +102,11 @@ div{
     display: grid; 
     margin-top: 20px;   
 }
+footer{
+    color: burlywood;
+    border-color: burlywood;
+    border-style: solid;
+    border-width: medium;
+    background-color: darkolivegreen;
+    height: 100%;
+}
