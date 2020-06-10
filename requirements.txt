@@ -1,0 +1,8 @@
+flask
+pandas
+numpy
+keras
+librosa
+os
+pydub
+werkzeug
