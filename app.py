@@ -6,7 +6,7 @@ import librosa
 import os
 import math
 from pydub import AudioSegment
-from tensorflow.keras import load_model
+from tensorflow.keras.models import load_model
 
 # create the flask app
 app = Flask(__name__)
@@ -68,10 +68,9 @@ def main():
             if index == predicted_index:
                 sp = species_df.loc[index, 'Common Name']
                 cn = species_df.loc[index, 'Species']
-                prediction = (sp, cn)
+                prediction = {sp : cn}
 
         return render_template('index.html', prediction = prediction)
 
 if __name__ == "__main__":
-    port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port)
+    app.run()

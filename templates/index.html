@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birdsongs of Europe</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+    integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+    crossorigin=""/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="myStyle.css">
+
+</head>
+    <div class='container'>
+        <div class='row'>
+        <div class="col-md-12 jumbotron text-center" id='jumbotron'>
+                <h1>European Songbirds:</h1>
+                <h2>Sightings and Recordings</h2>
+            </div>
+        </div>
+        <div class='row'>
+            <div id='map'>
+            </div>
+        </div>
+        <div class='row'>
+            <div class='col-md-6'>
+                <div class='row'>
+                    <div id='audio'>
+                        <div class="card" style="width: 18rem;">
+                            <img src="//www.xeno-canto.org/sounds/uploaded/BTOFEKXFGW/ffts/XC234032-small.png" class="card-img-top" alt="med spectrogram">
+                            <div class="card-body">
+                                <h4 class="card-title">Common Chaffinch (Fringilla coelebs)</h4>
+                                <audio src="//www.xeno-canto.org/sounds/uploaded/BTOFEKXFGW/XC234032-T02.mp3" controls></audio>
+                            </div>
+                        </div> 
+                    </div>
+                </div>
+                <div class='row'>
+                    <section id='menu'>
+                        <h3>Select a country to see species sighted there.</h3>
+                        <select name="menu" id="countries">
+                        </select>
+                    </section>
+                    <div id='plot'>
+                    </div>
+                </div>
+                <div class='row' id='model'>
+                    <h3>Do you have a birdsong recording? Upload it here to see if we can identify the species!</h3>
+                    <form action="/" method='POST'>
+                        <input type="file" class="custom-file-input" id="customFile">
+                        <input type="submit">
+                        <label class="custom-file-label" for="customFile">Possible Formats: .wav, .mp3, .mp4, .ogg, .wma, or .flv only</label>
+                    </form>
+                    <div id='output'>
+                        <p>Predicted Species: {{prediction}}</p> 
+                    </div>
+                </div>
+                <div class='row' id='table'>
+                    <h3>List of Species in this Dataset</h3>
+                    <table class="table table-striped">
+                        <thead>
+                          <tr style="text-align: right;">
+                            <th>Common Name</th>
+                            <th>Species</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>Barn Swallow</td>
+                            <td>Hirundo rustica</td>
+                          </tr>
+                          <tr>
+                            <td>Bluethroat</td>
+                            <td>Luscinia svecica</td>
+                          </tr>
+                          <tr>
+                            <td>Blyth's Reed Warbler</td>
+                            <td>Acrocephalus dumetorum</td>
+                          </tr>
+                          <tr>
+                            <td>Boreal Owl</td>
+                            <td>Aegolius funereus</td>
+                          </tr>
+                          <tr>
+                            <td>Cirl Bunting</td>
+                            <td>Emberiza cirlus</td>
+                          </tr>
+                          <tr>
+                            <td>Coal Tit</td>
+                            <td>Periparus ater</td>
+                          </tr>
+                          <tr>
+                            <td>Common Blackbird</td>
+                            <td>Turdus merula</td>
+                          </tr>
+                          <tr>
+                            <td>Common Chaffinch</td>
+                            <td>Fringilla coelebs</td>
+                          </tr>
+                          <tr>
+                            <td>Common Chiffchaff</td>
+                            <td>Phylloscopus collybita</td>
+                          </tr>
+                          <tr>
+                            <td>Common Cuckoo</td>
+                            <td>Cuculus canorus</td>
+                          </tr>
+                          <tr>
+                            <td>Common Grasshopper Warbler</td>
+                            <td>Locustella naevia</td>
+                          </tr>
+                          <tr>
+                            <td>Common Linnet</td>
+                            <td>Linaria cannabina</td>
+                          </tr>
+                          <tr>
+                            <td>Common Nightingale</td>
+                            <td>Luscinia megarhynchos</td>
+                          </tr>
+                          <tr>
+                            <td>Common Redstart</td>
+                            <td>Phoenicurus phoenicurus</td>
+                          </tr>
+                          <tr>
+                            <td>Common Reed Bunting</td>
+                            <td>Emberiza schoeniclus</td>
+                          </tr>
+                          <tr>
+                            <td>Common Rosefinch</td>
+                            <td>Carpodacus erythrinus</td>
+                          </tr>
+                          <tr>
+                            <td>Common Whitethroat</td>
+                            <td>Sylvia communis</td>
+                          </tr>
+                          <tr>
+                            <td>Corn Bunting</td>
+                            <td>Emberiza calandra</td>
+                          </tr>
+                          <tr>
+                            <td>Corn Crake</td>
+                            <td>Crex crex</td>
+                          </tr>
+                          <tr>
+                            <td>Eurasian Blackcap</td>
+                            <td>Sylvia atricapilla</td>
+                          </tr>
+                          <tr>
+                            <td>Eurasian Blue Tit</td>
+                            <td>Cyanistes caeruleus</td>
+                          </tr>
+                          <tr>
+                            <td>Eurasian Bullfinch</td>
+                            <td>Pyrrhula pyrrhula</td>
+                          </tr>
+                          <tr>
+                            <td>Eurasian Eagle-Owl</td>
+                            <td>Bubo bubo</td>
+                          </tr>
+                          <tr>
+                            <td>Eurasian Golden Oriole</td>
+                            <td>Oriolus oriolus</td>
+                          </tr>
+                          <tr>
+                            <td>Eurasian Pygmy Owl</td>
+                            <td>Glaucidium passerinum</td>
+                          </tr>
+                          <tr>
+                            <td>Eurasian Skylark</td>
+                            <td>Alauda arvensis</td>
+                          </tr>
+                          <tr>
+                            <td>Eurasian Wren</td>
+                            <td>Troglodytes troglodytes</td>
+                          </tr>
+                          <tr>
+                            <td>European Goldfinch</td>
+                            <td>Carduelis carduelis</td>
+                          </tr>
+                          <tr>
+                            <td>European Greenfinch</td>
+                            <td>Chloris chloris</td>
+                          </tr>
+                          <tr>
+                            <td>European Nightjar</td>
+                            <td>Caprimulgus europaeus</td>
+                          </tr>
+                          <tr>
+                            <td>European Pied Flycatcher</td>
+                            <td>Ficedula hypoleuca</td>
+                          </tr>
+                          <tr>
+                            <td>European Robin</td>
+                            <td>Erithacus rubecula</td>
+                          </tr>
+                          <tr>
+                            <td>Garden Warbler</td>
+                            <td>Sylvia borin</td>
+                          </tr>
+                          <tr>
+                            <td>Great Reed Warbler</td>
+                            <td>Acrocephalus arundinaceus</td>
+                          </tr>
+                          <tr>
+                            <td>Great Tit</td>
+                            <td>Parus major</td>
+                          </tr>
+                          <tr>
+                            <td>Icterine Warbler</td>
+                            <td>Hippolais icterina</td>
+                          </tr>
+                          <tr>
+                            <td>Lesser Whitethroat</td>
+                            <td>Sylvia curruca</td>
+                          </tr>
+                          <tr>
+                            <td>Little Owl</td>
+                            <td>Athene noctua</td>
+                          </tr>
+                          <tr>
+                            <td>Marsh Warbler</td>
+                            <td>Acrocephalus palustris</td>
+                          </tr>
+                          <tr>
+                            <td>Ortolan Bunting</td>
+                            <td>Emberiza hortulana</td>
+                          </tr>
+                          <tr>
+                            <td>Red Crossbill</td>
+                            <td>Loxia curvirostra</td>
+                          </tr>
+                          <tr>
+                            <td>Red-breasted Flycatcher</td>
+                            <td>Ficedula parva</td>
+                          </tr>
+                          <tr>
+                            <td>Sedge Warbler</td>
+                            <td>Acrocephalus schoenobaenus</td>
+                          </tr>
+                          <tr>
+                            <td>Song Thrush</td>
+                            <td>Turdus philomelos</td>
+                          </tr>
+                          <tr>
+                            <td>Tawny Owl</td>
+                            <td>Strix aluco</td>
+                          </tr>
+                          <tr>
+                            <td>Thrush Nightingale</td>
+                            <td>Luscinia luscinia</td>
+                          </tr>
+                          <tr>
+                            <td>Willow Warbler</td>
+                            <td>Phylloscopus trochilus</td>
+                          </tr>
+                          <tr>
+                            <td>Wood Warbler</td>
+                            <td>Phylloscopus sibilatrix</td>
+                          </tr>
+                          <tr>
+                            <td>Yellowhammer</td>
+                            <td>Emberiza citrinella</td>
+                          </tr>
+                        </tbody>
+                      </table>        
+                </div>
+            </div>
+            <div class='col-md-6'>
+                <div id='image'>
+                </div>                       
+            </div>
+        </div>
+    </div>
+    <footer>
+        Citations:
+        <p>https://www.kaggle.com/monogenea/birdsongs-from-europe</p>
+        <p>https://www.xeno-canto.org/</p>
+        <p>https://www.flickr.com/services/api/</p>
+      </footer>
+    <div>
+        <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+        integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+        crossorigin=""></script>
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+        <script src="https://d3js.org/d3.v5.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.7.1/d3-tip.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+        <script type='text/javascript' src='birdies.js'></script>
+        <script type='text/javascript' src='config.js'></script>
+    </div>
+</body>
+</html>
