@@ -2,7 +2,6 @@
 
 # dependencies
 import pandas as pd
-import math
 import numpy as np
 import librosa
 import os
@@ -13,8 +12,9 @@ from tensorflow.keras.models import load_model
  
 # use model to predict species from audio sample, deliver predicted label
 def make_prediction(data):
-    bird_model = load_model('bird_model.h5')
-    X = data[np.newaxis, ...]
+    bird_model = load_model('birds2_model.h5')
+    data_array = np.array(data)
+    X = data_array[..., np.newaxis]
     prediction_array = bird_model.predict(X)
 
     predicted_index = np.argmax(prediction_array, axis=1)
@@ -36,18 +36,14 @@ def make_prediction(data):
     d = {'Species': species_list, 'Common Name': common_names}
     name_df = pd.DataFrame(d)
     name_df = name_df.sort_values('Species')
+    name_df = name_df.reset_index(drop=True)
     
     for index, rows in name_df.iterrows():
-        if predicted_index == row[index]:
-            prediction = (f'{row['Species']}, {row['Common Name']} ')
-
-    
-    return prediction
-
-
-
-
-
+        if int(predicted_index) == int(index):
+            result = (f'{row['Species']}, {row['Common Name']} ')
+        break
+        
+    return result
 
 # load audio file, transform, extract MFCCs
 def transform_file(file):
@@ -79,23 +75,22 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 def upload_file():
-    if request.method == 'POST':
-        file = request.files['file']
-        if file and allowed_file(file.filename):
-            name, ext = os.path.splitext(file)
-            if ext == 'wav':
-                sound = AudioSegment.from_file(file, format=ext)
-                if len(sound) < 30000:
-                    duration = 30000-len(sound)
-                    segment = AudioSegment.silent(duration = duration)
-                    extract =  sound + segment
-                else:
-                    extract = sound[0:30000]
-                wav_file = extract.export('data.wav', format = 'wav')
-                mfccs = transform_file(wav_file)
+    file = request.files['file']
+    if file and allowed_file(file.filename):
+        name, ext = os.path.splitext(file)
+        if ext == 'wav':
+            sound = AudioSegment.from_file(file, format=ext)
+            if len(sound) < 30000:
+                duration = 30000-len(sound)
+                segment = AudioSegment.silent(duration = duration)
+                extract =  sound + segment
             else:
-                sound = AudioSegment.from_file(file, format=ext)
-                if len(sound) < 30000:
+                extract = sound[0:30000]
+            wav_file = extract.export('data.wav', format = 'wav')
+            data = transform_file(wav_file)
+        else:
+            sound = AudioSegment.from_file(file, format=ext)
+            if len(sound) < 30000:
                     duration = 30000-len(sound)
                     segment = AudioSegment.silent(duration = duration)
                     extract =  sound + segment
@@ -103,6 +98,7 @@ def upload_file():
                     extract = sound[0:30000]
                 wav_file = extract.export('data.wav', format = 'wav')
                 data = transform_file(wav_file)
-                make_prediction(data)
+        
+        prediction = make_prediction(data)
 
     return prediction
