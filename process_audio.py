@@ -79,7 +79,7 @@ def upload_file():
     if file and allowed_file(file.filename):
         name, ext = os.path.splitext(file)
         if ext == 'wav':
-            sound = AudioSegment.from_file(file, format=ext)
+            sound = AudioSegment.from_wav(file)
             if len(sound) < 30000:
                 duration = 30000-len(sound)
                 segment = AudioSegment.silent(duration = duration)
@@ -89,7 +89,7 @@ def upload_file():
             wav_file = extract.export('data.wav', format = 'wav')
             data = transform_file(wav_file)
         else:
-            sound = AudioSegment.from_file(file, format=ext)
+            sound = AudioSegment.from_mp3(file)
             if len(sound) < 30000:
                     duration = 30000-len(sound)
                     segment = AudioSegment.silent(duration = duration)
